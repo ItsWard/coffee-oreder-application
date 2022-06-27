@@ -5,6 +5,7 @@ import com.ward.coffee.domain.Coffee;
 import com.ward.coffee.service.CoffeeService;
 import com.ward.coffee.web.dto.CoffeePostDto;
 import com.ward.coffee.web.dto.CoffeeUpdateDto;
+import com.ward.handler.ex.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class CoffeeController {
     @PostMapping //Create 커피의 정보를 추가한다.
     public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto) {
         Coffee coffee = coffeeService.save(coffeePostDto);
+         if(coffee.getPrice() < 5000)
+             throw new CustomException("돈이 적어");
         return new ResponseEntity<>(coffee, HttpStatus.CREATED);
     }
 
